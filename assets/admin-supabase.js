@@ -41,6 +41,10 @@
   }
 
   function renderMetrics(state) {
+    const sales = state.orders
+      .filter(order => ['confirmed', 'cooking', 'ready', 'picked_up'].includes(order.status))
+      .reduce((total, order) => total + store.calculateOrderTotal(order, state), 0);
+    $('#metric-sales').textContent = store.formatPrice(sales);
     $('#metric-payment').textContent = state.orders.filter(order => order.status === 'payment_pending').length;
     $('#metric-cooking').textContent = state.orders.filter(order => ['confirmed', 'cooking'].includes(order.status)).length;
     $('#metric-ready').textContent = state.orders.filter(order => order.status === 'ready').length;
@@ -170,6 +174,7 @@
   }
 
   function clearAdminView() {
+    $('#metric-sales').textContent = '0원';
     $('#metric-payment').textContent = '0';
     $('#metric-cooking').textContent = '0';
     $('#metric-ready').textContent = '0';
