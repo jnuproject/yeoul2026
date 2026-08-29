@@ -120,8 +120,9 @@
 
   function renderPayment(state, order) {
     $('#payment-order-number').textContent = `#${order.orderNumber}`;
+    const orderTotal = store.calculateOrderTotal(order, state);
     document.querySelectorAll('[data-order-total]').forEach(element => {
-      element.textContent = store.formatPrice(store.calculateOrderTotal(order, state));
+      element.textContent = store.formatPrice(orderTotal);
     });
     const moveToQueue = () => {
       const currentOrder = findActiveOrder(store.getState());
@@ -155,10 +156,22 @@
     }
 
     const tossPayLink = $('#toss-pay-link');
-    tossPayLink.href = 'supertoss://send?amount=0&bank=NH%EB%86%8D%ED%98%91%EC%9D%80%ED%96%89&accountNo=3510999027853&origin=qr';
-    tossPayLink.target = '_self';
-    tossPayLink.onclick = moveToQueue;
-    tossPayLink.hidden = false;
+    if (state.settings.bankName && state.settings.accountNumber && orderTotal > 0) {
+      const tossParams = new URLSearchParams({
+        amount: String(orderTotal),
+        bank: state.settings.bankName,
+        accountNo: state.settings.accountNumber,
+        origin: 'qr'
+      });
+      tossPayLink.href = `supertoss://send?${tossParams.toString()}`;
+      tossPayLink.target = '_self';
+      tossPayLink.onclick = moveToQueue;
+      tossPayLink.hidden = false;
+    } else {
+      tossPayLink.removeAttribute('href');
+      tossPayLink.onclick = null;
+      tossPayLink.hidden = true;
+    }
 
     $('#bank-name').textContent = [state.settings.bankName, state.settings.accountHolder].filter(Boolean).join(' · ') || '계좌 정보 준비 중';
     $('#account-number').textContent = state.settings.accountNumber || '등록 전';
