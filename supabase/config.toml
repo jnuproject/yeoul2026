@@ -1,4 +1,1 @@
-project_id = "ehqvxjpzqqhqfifjrfrz"
-
-[functions.classrooms]
-verify_jwt = false
+project_id = "booth-order"
