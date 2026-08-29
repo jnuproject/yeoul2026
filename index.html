@@ -45,6 +45,9 @@
         <label class="field-label" for="payer-name">입금자 이름</label>
         <input class="text-input" id="payer-name" maxlength="20" autocomplete="name" placeholder="예: 김민수">
         <p class="field-help">입금 확인에만 사용하며 손님 대기열에는 표시되지 않습니다.</p>
+        <label class="field-label" for="contact">연락처</label>
+        <input class="text-input" id="contact" type="tel" inputmode="numeric" maxlength="13" autocomplete="tel" placeholder="010-1234-5678">
+        <p class="field-help">주문 확인이 필요할 때만 사용하며 공개되지 않고 행사 종료 후 삭제합니다.</p>
         <div class="sticky-action">
           <button class="primary-button split-button" id="create-order" type="button">
             <span>주문 접수</span><span id="review-total">0원</span>
@@ -84,7 +87,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
   <script src="./assets/supabase-config.js"></script>
-  <script src="./assets/supabase-store.js"></script>
-  <script src="./assets/customer-supabase.js?v=202608292138"></script>
+  <script src="./assets/supabase-store.js?v=202608292207"></script>
+  <script src="./assets/customer-supabase.js?v=202608292207"></script>
 </body>
 </html>

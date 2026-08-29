@@ -40,6 +40,13 @@
     return `${Math.floor(minutes / 60)}시간 전`;
   }
 
+  function formatContact(value) {
+    const digits = String(value || '').replace(/[^0-9]/g, '');
+    if (digits.length === 11) return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+    if (digits.length === 10) return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+    return '연락처 없음';
+  }
+
   function renderMetrics(state) {
     const sales = state.orders
       .filter(order => ['confirmed', 'cooking', 'ready', 'picked_up'].includes(order.status))
@@ -89,7 +96,7 @@
       const statusClass = order.status === 'ready' ? 'ready' : order.status === 'cooking' ? 'cooking' : '';
       return `<article class="admin-order">
         <div class="admin-order-number">#${order.orderNumber}</div>
-        <div class="admin-order-detail"><strong>${escapeHtml(itemSummary(order))}</strong><small>${escapeHtml(order.payerName)} · ${elapsed(order.createdAt)} · ${store.formatPrice(store.calculateOrderTotal(order, state))}</small></div>
+        <div class="admin-order-detail"><strong>${escapeHtml(itemSummary(order))}</strong><small>${escapeHtml(order.payerName)} · ${escapeHtml(formatContact(order.contact))} · ${elapsed(order.createdAt)} · ${store.formatPrice(store.calculateOrderTotal(order, state))}</small></div>
         <span class="status-pill ${statusClass}">${labels[order.status]}</span>
         <div class="order-actions">
           ${action ? `<button class="next" type="button" data-order="${order.id}" data-status="${action.next}">${action.label}</button>` : ''}

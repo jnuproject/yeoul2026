@@ -39,6 +39,7 @@ supabase db push --dry-run
 - `20260829115000_booth_admin_reconcile.sql`
 - `20260829115500_booth_payment_account_correct.sql`
 - `20260829120000_booth_name.sql`
+- `20260829120500_booth_order_contact.sql`
 
 ## 3. 마이그레이션 적용
 

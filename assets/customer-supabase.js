@@ -226,10 +226,16 @@
       $('#payer-name').focus();
       return;
     }
+    const contact = $('#contact').value.replace(/[^0-9]/g, '');
+    if (!/^01[0-9]{8,9}$/.test(contact)) {
+      toast('연락처는 01로 시작하는 휴대폰 번호를 입력해 주세요.');
+      $('#contact').focus();
+      return;
+    }
     const button = event.currentTarget;
     button.disabled = true;
     try {
-      const order = await store.createOrder({ payerName, items: getCartItems() });
+      const order = await store.createOrder({ payerName, contact, items: getCartItems() });
       activeOrderId = order.id;
       renderPayment(store.getState(), order);
       showStep('payment');
@@ -288,6 +294,7 @@
     activeOrderId = null;
     cart.clear();
     $('#payer-name').value = '';
+    $('#contact').value = '';
     renderMenu(store.getState());
     renderCartBar(store.getState());
     showStep('menu');

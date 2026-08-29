@@ -78,6 +78,7 @@
     id: row.id,
     orderNumber: Number(row.order_number),
     payerName: row.payer_name,
+    contact: row.contact || '',
     status: row.status,
     totalAmount: Number(row.total_amount),
     createdAt: row.created_at,
@@ -158,7 +159,7 @@
     const [settingsResult, menuResult, ordersResult] = await Promise.all([
       client.from('booth_settings').select('booth_name,bank_name,account_holder,account_number,transfer_qr_url,is_open').limit(1).maybeSingle(),
       client.from('booth_menu_items').select('id,name,description,price,image_url,sold_out,active,sort_order').order('sort_order'),
-      client.from('booth_orders').select('id,order_number,payer_name,status,total_amount,created_at,updated_at,booth_order_items(menu_item_id,name_snapshot,price_snapshot,quantity,line_total)').order('order_number')
+      client.from('booth_orders').select('id,order_number,payer_name,contact,status,total_amount,created_at,updated_at,booth_order_items(menu_item_id,name_snapshot,price_snapshot,quantity,line_total)').order('order_number')
     ]);
     const settings = throwIfError(settingsResult);
     const menu = throwIfError(menuResult);
@@ -232,13 +233,16 @@
     if (!document.hidden) scheduleRefresh();
   });
 
-  async function createOrder({ payerName, items }) {
+  async function createOrder({ payerName, contact, items }) {
     const normalizedItems = items
       .map(item => ({ menu_id: item.menuId, quantity: Math.min(20, Math.max(0, Number(item.quantity) || 0)) }))
       .filter(item => item.quantity > 0);
     if (!normalizedItems.length) throw new Error('주문할 메뉴가 없습니다.');
+    const normalizedContact = String(contact || '').replace(/[^0-9]/g, '');
+    if (!/^01[0-9]{8,9}$/.test(normalizedContact)) throw new Error('올바른 연락처를 입력해 주세요.');
     const data = throwIfError(await client.rpc('booth_create_order', {
       p_payer_name: payerName.trim(),
+      p_contact: normalizedContact,
       p_items: normalizedItems
     }));
     const row = Array.isArray(data) ? data[0] : data;
