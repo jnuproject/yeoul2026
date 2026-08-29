@@ -9,3 +9,4 @@
 .login-password-label{margin-top:14px}.login-password-input{margin-bottom:10px}.login-divider{margin:14px 0}.admin-login-card #send-login-link{width:100%}
 .metric-grid{grid-template-columns:repeat(5,1fr)}.metric-card small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.sales-card strong{color:var(--primary);font-size:24px}
 @media(max-width:860px){.metric-grid{grid-template-columns:repeat(2,1fr)}}
+[hidden]{display:none!important}
