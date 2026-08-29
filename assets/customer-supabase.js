@@ -194,7 +194,8 @@
     const status = statusLabels[order.status] || order.status;
     const ready = order.status === 'ready';
     $('#my-order-card').className = `my-order-card ${ready ? 'ready' : ''}`;
-    $('#my-order-card').innerHTML = `<div><small>내 주문번호</small><div class="my-order-number">#${order.orderNumber}</div></div><div class="my-order-status"><small>현재 상태</small><strong>${ready ? '수령해 주세요' : status}</strong>${['confirmed', 'cooking'].includes(order.status) ? `<small>앞에 ${ahead}팀</small>` : ''}</div>`;
+    const aheadMessage = ahead === 0 ? '바로 앞 순서예요' : `내 앞에 ${ahead}팀 있어요`;
+    $('#my-order-card').innerHTML = `<div><small>내 주문번호</small><div class="my-order-number">#${order.orderNumber}</div></div><div class="my-order-status"><small>현재 상태</small><strong>${ready ? '수령해 주세요' : status}</strong>${['confirmed', 'cooking'].includes(order.status) ? `<strong>${aheadMessage}</strong>` : ''}</div>`;
 
     const groups = [
       { label: '수령 가능', className: 'ready', statuses: ['ready'] },
