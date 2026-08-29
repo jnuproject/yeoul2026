@@ -9,7 +9,7 @@
   const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
 
   const labels = {
-    payment_pending: '입금 확인', confirmed: '주문 접수', cooking: '조리 중',
+    payment_pending: '입금 대기', confirmed: '주문 접수', cooking: '조리 중',
     ready: '수령 가능', picked_up: '수령 완료', cancelled: '취소'
   };
   const nextAction = {

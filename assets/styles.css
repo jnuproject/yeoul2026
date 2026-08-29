@@ -619,3 +619,116 @@ button:disabled { cursor: not-allowed; opacity: .38; }
   .menu-editor-controls { justify-content: flex-start; }
   .price-input { width: 96px; }
 }
+
+/* ADMIN OPERATIONS LAYOUT FIX — preserve RAW GRID while restoring readability */
+.admin-header,
+.admin-main {
+  max-width: 1440px;
+}
+
+.metric-card {
+  min-height: 124px;
+  padding: 18px;
+}
+.metric-card span { font-size: 11px; font-weight: 700; }
+.metric-card strong,
+.sales-card strong { margin-top: 14px; font-size: 36px; }
+.metric-card small { font-size: 10px; }
+
+.admin-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(430px, .72fr);
+}
+.admin-panel { padding: 22px; }
+.panel-heading h2 { font-size: 20px; }
+.panel-heading p,
+.live-badge { font-size: 11px; }
+.filter-row button {
+  min-height: 40px;
+  padding: 10px 12px;
+  font-size: 11px;
+}
+
+.admin-order {
+  grid-template-columns: 76px minmax(220px, 1fr) 96px auto;
+  gap: 16px;
+  min-height: 76px;
+  padding: 17px 0;
+}
+.admin-order-number { font-size: 28px; }
+.admin-order-detail strong { font-size: 13px; line-height: 1.45; }
+.admin-order-detail small { font-size: 11px; line-height: 1.5; }
+.status-pill { padding: 8px 9px; font-size: 11px; }
+.order-actions button {
+  min-height: 38px;
+  padding: 9px 11px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.menu-panel { min-width: 0; }
+.admin-menu-list { margin-top: 18px; }
+.admin-menu-item.menu-editor {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 220px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 10px;
+}
+.menu-editor-title {
+  min-width: 0;
+  padding: 0;
+}
+.admin-menu-item strong { font-size: 13px; line-height: 1.4; }
+.admin-menu-item small { font-size: 10px; }
+.menu-editor-controls {
+  display: grid;
+  grid-template-columns: 128px 92px;
+  justify-content: end;
+  gap: 0;
+  width: 220px;
+}
+.menu-editor-controls > label { display: block; min-width: 0; }
+.price-input {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px;
+  border-right: 0;
+  font-size: 12px;
+}
+.price-input:focus { padding: 9px; }
+.stock-button {
+  min-height: 40px;
+  padding: 9px 7px;
+  border-left: 1px solid var(--line);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.menu-editor-controls .stock-button:nth-of-type(2),
+.menu-editor-controls .stock-button:nth-of-type(3) { border-top: 0; }
+.menu-editor-controls .stock-button:nth-of-type(2) { border-right: 0; }
+.privacy-note { font-size: 10px; }
+
+@media (max-width: 1000px) {
+  .admin-layout { grid-template-columns: 1fr; }
+  .menu-panel { border-left: 0; }
+}
+
+@media (max-width: 640px) {
+  .metric-card { min-height: 108px; padding: 14px; }
+  .metric-card strong,
+  .sales-card strong { font-size: 30px; }
+  .admin-order {
+    grid-template-columns: 58px minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+  .admin-order > .status-pill { display: none; }
+  .admin-menu-item.menu-editor {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .menu-editor-controls {
+    grid-template-columns: minmax(0, 1fr) minmax(88px, .72fr);
+    width: 100%;
+    justify-content: stretch;
+  }
+}
