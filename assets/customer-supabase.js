@@ -124,11 +124,31 @@
       element.textContent = store.formatPrice(store.calculateOrderTotal(order, state));
     });
     const kakaoPayLink = $('#kakao-pay-link');
-    if (state.settings.transferQrUrl) {
-      kakaoPayLink.href = state.settings.transferQrUrl;
+    const bridgeUrl = state.settings.transferQrUrl;
+    if (bridgeUrl) {
+      const userAgent = navigator.userAgent;
+      const isAndroid = /Android/i.test(userAgent);
+      const isIos = /iPhone|iPad|iPod/i.test(userAgent)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isCurrentKakaoPayLink = bridgeUrl === 'https://qr.kakaopay.com/FZjVSUoNp';
+      const qrCode = '281006011181748411009807';
+      const directAppUrl = isAndroid
+        ? `intent://kakaopay/money/to/qr?qr_code=${qrCode}#Intent;scheme=kakaotalk;package=com.kakao.talk;end;`
+        : `kakaotalk://kakaopay/money/to/qr?qr_code=${qrCode}`;
+      const opensAppDirectly = isCurrentKakaoPayLink && (isAndroid || isIos);
+
+      kakaoPayLink.href = opensAppDirectly ? directAppUrl : bridgeUrl;
+      kakaoPayLink.target = opensAppDirectly ? '_self' : '_blank';
       kakaoPayLink.hidden = false;
+      kakaoPayLink.onclick = () => {
+        const currentOrder = findActiveOrder(store.getState());
+        if (!currentOrder) return;
+        renderQueue(store.getState());
+        showStep('queue');
+      };
     } else {
       kakaoPayLink.removeAttribute('href');
+      kakaoPayLink.onclick = null;
       kakaoPayLink.hidden = true;
     }
     $('#bank-name').textContent = [state.settings.bankName, state.settings.accountHolder].filter(Boolean).join(' · ') || '계좌 정보 준비 중';
