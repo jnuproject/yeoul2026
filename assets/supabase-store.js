@@ -15,7 +15,7 @@
   const IS_ADMIN_PAGE = document.body.classList.contains('admin-body');
   const CURRENT_TOKEN_KEY = 'booth-order-public-token-v1';
   const listeners = new Set();
-  const pendingRefreshes = new Set();
+  let activeRefreshPromise = null;
   let currentOrderId = null;
   let session = null;
   let isAdmin = false;
@@ -151,12 +151,7 @@
 
   async function checkAdmin() {
     if (!session) return false;
-    try {
-      return Boolean(throwIfError(await client.rpc('booth_is_admin')));
-    } catch (error) {
-      console.error('관리자 권한 확인 실패:', error);
-      return false;
-    }
+    return Boolean(throwIfError(await client.rpc('booth_is_admin')));
   }
 
   async function loadAdminState() {
@@ -176,23 +171,26 @@
     notify();
   }
 
-  async function refresh() {
-    const key = IS_ADMIN_PAGE ? 'admin' : 'public';
-    if (pendingRefreshes.has(key)) return;
-    pendingRefreshes.add(key);
-    try {
-      if (IS_ADMIN_PAGE) {
-        isAdmin = await checkAdmin();
-        if (isAdmin) await loadAdminState();
-        else {
-          state = { ...state, menu: [], orders: [] };
-          notify();
-        }
-      } else {
-        await loadPublicState();
+  async function runRefresh() {
+    if (IS_ADMIN_PAGE) {
+      isAdmin = await checkAdmin();
+      if (isAdmin) await loadAdminState();
+      else {
+        state = { ...state, menu: [], orders: [] };
+        notify();
       }
+    } else {
+      await loadPublicState();
+    }
+  }
+
+  async function refresh() {
+    if (activeRefreshPromise) return activeRefreshPromise;
+    activeRefreshPromise = runRefresh();
+    try {
+      return await activeRefreshPromise;
     } finally {
-      pendingRefreshes.delete(key);
+      activeRefreshPromise = null;
     }
   }
 
@@ -309,7 +307,11 @@
   async function signInWithPassword(email, password) {
     if (!password) throw new Error('비밀번호를 입력해 주세요.');
     const result = await client.auth.signInWithPassword({ email, password });
-    throwIfError(result);
+    const data = throwIfError(result);
+    session = data.session;
+    if (!session) throw new Error('로그인 세션을 만들지 못했습니다.');
+    await refresh();
+    if (!isAdmin) throw new Error('이 계정에는 부스 관리자 권한이 없습니다.');
   }
 
   async function signInWithOtp(email) {

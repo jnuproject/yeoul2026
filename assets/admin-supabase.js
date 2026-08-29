@@ -246,7 +246,7 @@
     $('#login-status').textContent = '로그인하고 있습니다.';
     try {
       await store.signInWithPassword(ADMIN_EMAIL, password);
-      $('#login-status').textContent = '관리자 권한을 확인하고 있습니다.';
+      renderAuth();
     } catch (error) {
       const message = friendlyAuthError(error);
       $('#login-status').textContent = message;
