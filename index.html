@@ -11,13 +11,10 @@
 </head>
 <body class="customer-body">
   <div class="customer-shell">
-    <header class="customer-header">
-      <div>
-        <p class="eyebrow">ORDER_SYS / QR</p>
-        <h1 id="booth-name">감자에 싹이나서 이파리에 감자</h1>
-      </div>
-      <span class="wait-badge" id="wait-time">대기 약 12분</span>
-    </header>
+    <div hidden aria-hidden="true">
+      <span id="booth-name"></span>
+      <span id="wait-time"></span>
+    </div>
 
     <div class="step-progress" aria-label="주문 단계">
       <span class="active" data-progress="1"></span>
