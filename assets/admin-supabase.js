@@ -199,7 +199,7 @@
       clearAdminView();
       login.hidden = false;
       app.hidden = true;
-      status.textContent = '등록된 관리자 이메일로 로그인 링크를 보내드립니다.';
+      status.textContent = '비밀번호로 로그인하거나 이메일 링크를 받을 수 있습니다.';
       sendButton.hidden = false;
       logoutFromLogin.hidden = true;
       return;
@@ -226,6 +226,36 @@
     renderOrders(store.getState());
   });
 
+  function friendlyAuthError(error) {
+    const message = String(error && error.message || error).toLowerCase();
+    if (message.includes('rate limit')) return '로그인 이메일 발송 한도를 초과했습니다. 잠시 후 다시 시도하거나 비밀번호로 로그인해 주세요.';
+    if (message.includes('invalid login credentials')) return '이메일 또는 비밀번호가 맞지 않습니다.';
+    if (message.includes('email not confirmed')) return '이메일 인증이 완료되지 않은 계정입니다.';
+    return error.message || '로그인에 실패했습니다.';
+  }
+
+  async function passwordLogin() {
+    const button = $('#admin-password-login');
+    const password = $('#admin-password').value;
+    button.disabled = true;
+    $('#login-status').textContent = '로그인하고 있습니다.';
+    try {
+      await store.signInWithPassword(ADMIN_EMAIL, password);
+      $('#login-status').textContent = '관리자 권한을 확인하고 있습니다.';
+    } catch (error) {
+      const message = friendlyAuthError(error);
+      $('#login-status').textContent = message;
+      toast(message);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  $('#admin-password-login').addEventListener('click', passwordLogin);
+  $('#admin-password').addEventListener('keydown', event => {
+    if (event.key === 'Enter') passwordLogin();
+  });
+
   $('#send-login-link').addEventListener('click', async event => {
     const button = event.currentTarget;
     button.disabled = true;
@@ -235,8 +265,9 @@
       $('#login-status').textContent = `${ADMIN_EMAIL}로 보낸 링크를 열어주세요.`;
       toast('로그인 이메일을 보냈습니다.');
     } catch (error) {
-      $('#login-status').textContent = error.message;
-      toast(error.message);
+      const message = friendlyAuthError(error);
+      $('#login-status').textContent = message;
+      toast(message);
     } finally {
       button.disabled = false;
     }

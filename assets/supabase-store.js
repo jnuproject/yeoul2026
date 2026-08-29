@@ -306,6 +306,12 @@
     return updated;
   }
 
+  async function signInWithPassword(email, password) {
+    if (!password) throw new Error('비밀번호를 입력해 주세요.');
+    const result = await client.auth.signInWithPassword({ email, password });
+    throwIfError(result);
+  }
+
   async function signInWithOtp(email) {
     const redirectUrl = `${window.location.origin}${window.location.pathname}`;
     const result = await client.auth.signInWithOtp({
@@ -352,6 +358,6 @@
   window.BoothStore = {
     getState, ready, subscribe, createOrder, updateOrderStatus, toggleSoldOut, updateMenuItem,
     calculateOrderTotal, setCurrentOrderId, getCurrentOrderId, clearCurrentOrder,
-    getAuthState, signInWithOtp, signOut, formatPrice
+    getAuthState, signInWithPassword, signInWithOtp, signOut, formatPrice
   };
 })();
