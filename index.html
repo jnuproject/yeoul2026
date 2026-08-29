@@ -7,13 +7,17 @@
   <title>감자에 싹이나서 이파리에 감자 주문</title>
   <link rel="icon" type="image/png" href="./assets/favicon.png?v=202608292215">
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png?v=202608292215">
-  <link rel="stylesheet" href="./assets/styles.css?v=202608292222">
+  <link rel="stylesheet" href="./assets/styles.css?v=202608292246">
 </head>
 <body class="customer-body">
   <div class="customer-shell">
-    <div hidden aria-hidden="true">
-      <span id="booth-name"></span>
-      <span id="wait-time"></span>
+    <div class="customer-wait-summary">
+      <div>
+        <small>현재 주문 대기</small>
+        <strong id="wait-time">대기 현황 불러오는 중</strong>
+      </div>
+      <span>● 실시간</span>
+      <span id="booth-name" hidden></span>
     </div>
 
     <div class="step-progress" aria-label="주문 단계">
@@ -87,6 +91,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
   <script src="./assets/supabase-config.js"></script>
   <script src="./assets/supabase-store.js?v=202608292207"></script>
-  <script src="./assets/customer-supabase.js?v=202608292238"></script>
+  <script src="./assets/customer-supabase.js?v=202608292246"></script>
 </body>
 </html>

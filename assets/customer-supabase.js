@@ -56,8 +56,8 @@
     $('#booth-name').textContent = state.settings.boothName;
     const waitingTeams = state.orders.filter(order => ['payment_pending', 'confirmed', 'cooking'].includes(order.status)).length;
     $('#wait-time').textContent = state.settings.isOpen
-      ? (waitingTeams ? `현재 ${waitingTeams}팀 대기` : '바로 주문 가능')
-      : '주문 준비 중';
+      ? (waitingTeams ? `지금 주문하면 앞에 ${waitingTeams}팀` : '지금 주문하면 바로 접수돼요')
+      : '지금은 주문 준비 중이에요';
     const available = state.menu.filter(item => !item.soldOut);
     $('#menu-count').textContent = `${available.length}개 메뉴`;
 

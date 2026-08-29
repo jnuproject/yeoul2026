@@ -28,7 +28,7 @@
   }
 
   function matchesFilter(order) {
-    if (activeFilter === 'active') return ['payment_pending', 'confirmed', 'cooking', 'ready'].includes(order.status);
+    if (activeFilter === 'active') return ['confirmed', 'cooking'].includes(order.status);
     if (activeFilter === 'done') return ['picked_up', 'cancelled'].includes(order.status);
     return order.status === activeFilter;
   }
@@ -58,8 +58,25 @@
     $('#metric-done').textContent = state.orders.filter(order => ['picked_up', 'cancelled'].includes(order.status)).length;
   }
 
-  function itemSummary(order) {
-    return (order.items || []).map(item => `${item.name || '삭제된 메뉴'} ${item.quantity}`).join(' · ');
+  function renderMenuTotals(state) {
+    const totals = new Map(state.menu.map(item => [item.id, { name: item.name, quantity: 0 }]));
+    state.orders
+      .filter(order => ['confirmed', 'cooking'].includes(order.status))
+      .forEach(order => (order.items || []).forEach(item => {
+        const key = item.menuId || `name:${item.name}`;
+        const total = totals.get(key) || { name: item.name || '삭제된 메뉴', quantity: 0 };
+        total.quantity += Number(item.quantity) || 0;
+        totals.set(key, total);
+      }));
+
+    const items = [...totals.values()];
+    $('#kds-menu-totals').innerHTML = items.length
+      ? items.map(item => `<article class="kds-total-card"><span>${escapeHtml(item.name)}</span><strong>${item.quantity}</strong><small>${item.quantity ? '개 남음' : '대기 없음'}</small></article>`).join('')
+      : '<div class="empty-state">등록된 메뉴가 없습니다.</div>';
+  }
+
+  function itemLines(order) {
+    return (order.items || []).map(item => `<span>${escapeHtml(item.name || '삭제된 메뉴')} <b>×${Number(item.quantity) || 0}</b></span>`).join('');
   }
 
   function bindOrderActions() {
@@ -94,10 +111,10 @@
         ? { label: '주문 복구', next: 'confirmed' }
         : order.status === 'picked_up' ? { label: '수령 취소', next: 'ready' } : null;
       const statusClass = order.status === 'ready' ? 'ready' : order.status === 'cooking' ? 'cooking' : '';
-      return `<article class="admin-order">
-        <div class="admin-order-number">#${order.orderNumber}</div>
-        <div class="admin-order-detail"><strong>${escapeHtml(itemSummary(order))}</strong><small>${escapeHtml(order.payerName)} · ${escapeHtml(formatContact(order.contact))} · ${elapsed(order.createdAt)} · ${store.formatPrice(store.calculateOrderTotal(order, state))}</small></div>
-        <span class="status-pill ${statusClass}">${labels[order.status]}</span>
+      return `<article class="admin-order kds-order-card">
+        <div class="kds-order-head"><div class="admin-order-number">#${order.orderNumber}</div><span class="status-pill ${statusClass}">${labels[order.status]}</span></div>
+        <div class="admin-order-items">${itemLines(order)}</div>
+        <div class="admin-order-detail"><small>${escapeHtml(order.payerName)} · ${escapeHtml(formatContact(order.contact))}<br>${elapsed(order.createdAt)} · ${store.formatPrice(store.calculateOrderTotal(order, state))}</small></div>
         <div class="order-actions">
           ${action ? `<button class="next" type="button" data-order="${order.id}" data-status="${action.next}">${action.label}</button>` : ''}
           ${restoreAction ? `<button class="next" type="button" data-order="${order.id}" data-status="${restoreAction.next}">${restoreAction.label}</button>` : ''}
@@ -175,12 +192,14 @@
   }
 
   function render(state) {
+    renderMenuTotals(state);
     renderMetrics(state);
     renderOrders(state);
     renderMenu(state);
   }
 
   function clearAdminView() {
+    $('#kds-menu-totals').replaceChildren();
     $('#metric-sales').textContent = '0원';
     $('#metric-payment').textContent = '0';
     $('#metric-cooking').textContent = '0';
