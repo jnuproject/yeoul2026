@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#eeeeea">
   <title>부스 주문 관리</title>
   <link rel="icon" type="image/png" href="../assets/favicon.png?v=202608292215">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=202608292215">
-  <link rel="stylesheet" href="../assets/styles.css?v=202608292118">
+  <link rel="stylesheet" href="../assets/styles.css?v=202608292222">
 </head>
 <body class="admin-body">
   <main class="admin-login-wrap" id="admin-login">
     <section class="admin-login-card" aria-labelledby="login-title">
-      <p class="eyebrow">부스 관리</p>
+      <p class="eyebrow">ADMIN_SYS / AUTH</p>
       <h1 id="login-title">관리자 로그인</h1>
       <p id="login-status">로그인 상태를 확인하고 있습니다.</p>
       <div class="admin-login-email">k01027895490@gmail.com</div>
@@ -28,7 +28,7 @@
 
   <div id="admin-app" hidden>
     <header class="admin-header">
-      <div><p class="eyebrow">부스 관리</p><h1>주문 관리</h1><p>Supabase 실시간 주문 데이터입니다.</p></div>
+      <div><p class="eyebrow">ADMIN_SYS / QUEUE</p><h1>주문 관리</h1><p>STATUS: LIVE / DATABASE: CONNECTED</p></div>
       <div class="admin-header-actions">
         <a class="secondary-button link-button" href="../index.html" target="_blank" rel="noopener noreferrer">고객 화면 열기</a>
         <button class="secondary-button" id="admin-logout" type="button">로그아웃</button>
@@ -61,7 +61,7 @@
         <aside class="admin-panel menu-panel">
           <div class="panel-heading"><div><h2>메뉴 관리</h2><p>가격을 저장하고 판매를 시작하세요.</p></div></div>
           <div class="admin-menu-list" id="admin-menu-list"></div>
-          <div class="privacy-note"><strong>공개 범위</strong><br>손님 화면에는 주문번호와 상태만 표시됩니다. 메뉴와 입금자명은 관리자 화면에서만 확인합니다.</div>
+          <div class="privacy-note"><strong>공개 범위</strong><br>손님 화면에는 주문번호와 상태만 표시됩니다. 메뉴·입금자명·연락처는 관리자 화면에서만 확인합니다.</div>
         </aside>
       </div>
     </main>

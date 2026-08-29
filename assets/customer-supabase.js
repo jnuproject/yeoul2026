@@ -306,7 +306,7 @@
     if (activeOrderId && $('#step-queue').classList.contains('active')) renderQueue(state);
   });
 
-  document.querySelector('.eyebrow').textContent = 'QR 주문';
+  document.querySelector('.eyebrow').textContent = 'ORDER_SYS / QR';
   $('#payer-name').nextElementSibling.textContent = '입금 확인에만 사용하며 손님 대기열에는 표시하지 않습니다. 행사 종료 후 삭제합니다.';
   selectPaymentTab('account');
 
