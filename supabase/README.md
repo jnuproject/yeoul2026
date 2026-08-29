@@ -37,6 +37,8 @@ supabase db push --dry-run
 - `20260829113000_booth_payment_account.sql`
 - `20260829114000_booth_kakaopay_link.sql`
 - `20260829115000_booth_admin_reconcile.sql`
+- `20260829115500_booth_payment_account_correct.sql`
+- `20260829120000_booth_name.sql`
 
 ## 3. 마이그레이션 적용
 

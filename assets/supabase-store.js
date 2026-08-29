@@ -25,7 +25,7 @@
 
   let state = {
     settings: {
-      boothName: '오늘의 부스', bankName: '', accountHolder: '', accountNumber: '',
+      boothName: '감자에 싹이나서 이파리에 감자', bankName: '', accountHolder: '', accountNumber: '',
       transferQrUrl: null, isOpen: true
     },
     menu: [],

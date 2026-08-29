@@ -123,6 +123,13 @@
     document.querySelectorAll('[data-order-total]').forEach(element => {
       element.textContent = store.formatPrice(store.calculateOrderTotal(order, state));
     });
+    const moveToQueue = () => {
+      const currentOrder = findActiveOrder(store.getState());
+      if (!currentOrder) return;
+      renderQueue(store.getState());
+      showStep('queue');
+    };
+
     const kakaoPayLink = $('#kakao-pay-link');
     const bridgeUrl = state.settings.transferQrUrl;
     if (bridgeUrl) {
@@ -140,17 +147,19 @@
       kakaoPayLink.href = opensAppDirectly ? directAppUrl : bridgeUrl;
       kakaoPayLink.target = opensAppDirectly ? '_self' : '_blank';
       kakaoPayLink.hidden = false;
-      kakaoPayLink.onclick = () => {
-        const currentOrder = findActiveOrder(store.getState());
-        if (!currentOrder) return;
-        renderQueue(store.getState());
-        showStep('queue');
-      };
+      kakaoPayLink.onclick = moveToQueue;
     } else {
       kakaoPayLink.removeAttribute('href');
       kakaoPayLink.onclick = null;
       kakaoPayLink.hidden = true;
     }
+
+    const tossPayLink = $('#toss-pay-link');
+    tossPayLink.href = 'supertoss://send?amount=0&bank=NH%EB%86%8D%ED%98%91%EC%9D%80%ED%96%89&accountNo=3510999027853&origin=qr';
+    tossPayLink.target = '_self';
+    tossPayLink.onclick = moveToQueue;
+    tossPayLink.hidden = false;
+
     $('#bank-name').textContent = [state.settings.bankName, state.settings.accountHolder].filter(Boolean).join(' · ') || '계좌 정보 준비 중';
     $('#account-number').textContent = state.settings.accountNumber || '등록 전';
     $('#copy-account').disabled = !state.settings.accountNumber;

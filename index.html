@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <title>오늘의 부스 주문</title>
+  <title>감자에 싹이나서 이파리에 감자 주문</title>
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
 <body class="customer-body">
@@ -12,7 +12,7 @@
     <header class="customer-header">
       <div>
         <p class="eyebrow">QR ORDER</p>
-        <h1 id="booth-name">오늘의 부스</h1>
+        <h1 id="booth-name">감자에 싹이나서 이파리에 감자</h1>
       </div>
       <span class="wait-badge" id="wait-time">대기 약 12분</span>
     </header>
@@ -54,13 +54,14 @@
 
       <section class="customer-step" id="step-payment" aria-labelledby="payment-title">
         <div class="section-heading"><div><p class="step-label">3 / 4</p><h2 id="payment-title">송금해 주세요</h2></div></div>
-        <p class="section-description">카카오페이로 바로 보내거나 계좌번호를 복사할 수 있어요.</p>
+        <p class="section-description">카카오페이나 토스로 바로 보내거나 계좌번호를 복사할 수 있어요.</p>
         <div class="order-number-strip"><span>주문번호</span><strong id="payment-order-number">#—</strong></div>
         <div class="payment-panel active" id="payment-account">
           <div class="account-card">
             <b class="payment-amount" data-order-total>0원</b>
             <a class="primary-button payment-link-button" id="kakao-pay-link" href="#" target="_blank" rel="noopener noreferrer">카카오페이로 바로 보내기</a>
-            <div class="payment-divider"><span>카카오페이가 없다면</span></div>
+            <a class="secondary-button payment-link-button" id="toss-pay-link" href="#">토스로 바로 보내기</a>
+            <div class="payment-divider"><span>송금 앱이 없다면</span></div>
             <span id="bank-name">계좌 정보 불러오는 중</span>
             <strong id="account-number">—</strong>
             <button class="secondary-button" id="copy-account" type="button">계좌번호 복사</button>
@@ -84,6 +85,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
   <script src="./assets/supabase-config.js"></script>
   <script src="./assets/supabase-store.js"></script>
-  <script src="./assets/customer-supabase.js?v=202608292123"></script>
+  <script src="./assets/customer-supabase.js?v=202608292130"></script>
 </body>
 </html>
